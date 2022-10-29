@@ -31,14 +31,10 @@ string exor(string dividend, string key);
 string division(string dividend, string key);
 bool validation(string rem);
 
-/*
- * This is the main function of the program
- */
+/* This is the main function of the program */
 int main(int argc, char** argv) {
-	string sent, received;
-	string key;
-	string appendedCRC;
-	string receiverRem;
+	string sent, received, key;
+	string appendedCRC, receiverRem;
 	
 	cout<<"Sent binary data: ";
 	cin>>sent;
@@ -69,12 +65,10 @@ int main(int argc, char** argv) {
 	 */
 	bool noError = validation(receiverRem);
 	
-	/*
-	 * output messages
-	 */
-	if(noError){
+	/* output messages */
+	if (noError) {
 		cout<<"No error detected.";
-	} else{
+	} else {
 		cout<<"Error detected.";
 	}
 	
@@ -85,10 +79,9 @@ int main(int argc, char** argv) {
  * function to append zeroes to the sent data
  * as well as to calculate the remainder or the crc
  */
-string getCRC(string sent, string key){
+string getCRC(string sent, string key) {
 	int keyLen = key.length();
-	string sentAppended;
-	string rem;
+	string sentAppended, rem;
 	
 	sentAppended = appendZeroes(sent, keyLen);
 	
@@ -97,13 +90,11 @@ string getCRC(string sent, string key){
 	return sent + rem;
 }
 
-/*
- * appending zeroes to the sent data
- */
-string appendZeroes(string sent, int keyLen){
+/* appending zeroes to the sent data */
+string appendZeroes(string sent, int keyLen) {
 	string result = sent;
 	
-	for(int i = 1;i < keyLen;i++){
+	for (int i = 1; i < keyLen; i++) {
 		result.append("0");
 	}
 	
@@ -115,32 +106,29 @@ string appendZeroes(string sent, int keyLen){
  * this is used in dividing the sent
  * and received data
  */
-string division(string dividend, string key){
+string division(string dividend, string key) {
 	int keyLen = key.length();
-	string subDividend;
-	string divisor;
+	string subDividend, divisor;
 	string quotient = "";
-	string rem;
-	string result;
-	string bit;
+	string rem, result, bit;
 	
-	for(int i = 0;i < dividend.length();){
-		if(i == 0){
+	for (int i = 0; i < dividend.length(); /*VOID*/) {
+		if (i == 0) {
 			subDividend = dividend.substr(0, keyLen);
 			i = keyLen;
-		} else{
+		} else {
 			subDividend = rem.substr(1, keyLen - 1) + dividend[i];
 			i++;
 		}
 		
 		bit = compareMSB(subDividend);
 		quotient += bit;
-		if(bit == "0"){
+		if (bit == "0") {
 			divisor = "";
-			for(int i = 0;i < keyLen;i++){
+			for (int i = 0; i < keyLen; i++) {
 				divisor += "0";
 			}
-		} else{
+		} else {
 			divisor = key;
 		}
 		rem = exor(subDividend, divisor);
@@ -160,8 +148,8 @@ string division(string dividend, string key){
  * is one then the quotient shall be appended
  * with one, otherwise, append zero
  */
-string compareMSB(string dividend){
-	if(dividend[0] == '1'){
+string compareMSB(string dividend) {
+	if (dividend[0] == '1') {
 		return "1";
 	}
 	return "0";
@@ -174,13 +162,13 @@ string compareMSB(string dividend){
  * the product from multiplying one
  * bit of the quotient to the divisor
  */
-string exor(string dividend, string key){
+string exor(string dividend, string key) {
 	string result = "";
 	
-	for(int i = 0;i < key.length();i++){
-		if(dividend[i] != key[i]){
+	for (int i = 0; i < key.length(); i++) {
+		if (dividend[i] != key[i]) {
 			result += "1";
-		} else{
+		} else {
 			result += "0";
 		}
 	}
@@ -193,9 +181,9 @@ string exor(string dividend, string key){
  * function to check if there is
  * no error in the data transmission
  */
-bool validation(string rem){
-	for(int i = 0;i < rem.length();i++){
-		if(rem[i] == '1'){
+bool validation(string rem) {
+	for (int i = 0; i < rem.length(); i++) {
+		if (rem[i] == '1') {
 			return false;
 		}
 		return true;

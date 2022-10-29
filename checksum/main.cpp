@@ -48,13 +48,13 @@ int main(int argc, char** argv) {
 	cout<<"Sent binary data: ";
 	cin>>sent;
 	
-	cout<<"Received binary data: ";
+    cout<<"Received binary data: ";
 	cin>>received;
 	
 	cout<<"Block size: ";
 	cin>>blockSize;
 	
-	if(!sameLength(sent, received)){
+	if (!sameLength(sent, received)) {
 		cout<<"Data does not have the same length"<<endl;
 	}
 	
@@ -75,7 +75,7 @@ int main(int argc, char** argv) {
  * break string into k blocks with
  * blockSize number of bits
  */
-string getBlocks(string data, string blocks[], int blockSize){
+string getBlocks(string data, string blocks[], int blockSize) {
 	int strLen = data.length();
 	int numZeroes = strLen % blockSize;
 	int startPos = 0;
@@ -86,8 +86,8 @@ string getBlocks(string data, string blocks[], int blockSize){
 	 * append zeroes to the left of the data
 	 * to fill in the gaps in a block
 	 */
-	if(numZeroes != 0){
-		for(int i = 0;i < numZeroes;i++){
+	if (numZeroes != 0) {
+		for (int i = 0;i < numZeroes;i++) {
 			data.insert(0, "0");
 		}
 		blockLen++;
@@ -97,7 +97,7 @@ string getBlocks(string data, string blocks[], int blockSize){
 	 * taking substring of original string
 	 * to create the blocks of data
 	 */
-	for(int i = 0; startPos < strLen ;i++){
+	for (int i = 0; startPos < strLen; i++) {
 		blocks[i] = data.substr(startPos, blockSize);
 		startPos += blockSize;
 	}
@@ -106,42 +106,38 @@ string getBlocks(string data, string blocks[], int blockSize){
 	 * appending zeroes to the sum
 	 * for its first use
 	 */
-	for(int i = 0;i < blockSize;i++){
+	for (int i = 0; i < blockSize; i++) {
 		sum.insert(0, "0");
 	}
 	
-	/*
-	 * adding the blocks
-	 */
-	for(int i = 0;i < blockLen;i++){
+	/* adding the blocks */
+	for (int i = 0; i < blockLen; i++) {
 		sum = addBlocks(blocks[i], sum);
 	}
 	
 	return sum;
 }
 
-/*
- * adding the blocks of data
- */
-string addBlocks(string add1, string add2){
+/* adding the blocks of data */
+string addBlocks(string add1, string add2) {
 	string result = "";
 	string carry = "0";
 	int strLen = add1.length();
 	
-	for(int i = strLen - 1;i >= 0;i--){
-		if(add1[i] != add2[i]){
-			if(carry == "0"){
+	for (int i = strLen - 1; i >= 0; i--) {
+		if (add1[i] != add2[i]) {
+			if (carry == "0") {
 				result.insert(0, "1");
-			} else{
+			} else {
 				result.insert(0, "0");
 				carry = "1";
 			}
-		} else if(add1[i] == '0'){
+		} else if (add1[i] == '0') {
 			carry == "0"
 			? result.insert(0, "0")
 			: result.insert(0, "1");
 			carry = "0";
-		} else{
+		} else {
 			carry == "0"
 			? result.insert(0, "0")
 			: result.insert(0, "1");
@@ -154,8 +150,8 @@ string addBlocks(string add1, string add2){
 	 * recursion occurs to add the carry
 	 * to the latest sum
 	 */
-	if(carry == "1"){
-		for(int i = 0;i < strLen-1;i++){
+	if (carry == "1") {
+		for (int i = 0;i < strLen-1;i++) {
 			carry.insert(0, "0");
 		}
 		result = addBlocks(result, carry);
@@ -164,11 +160,9 @@ string addBlocks(string add1, string add2){
 	return result;
 }
 
-/*
- * performing 1s complement to the sum
- */
-string onesComplement(string sum){
-	for(int i = 0;i < sum.length();i++){
+/* performing 1s complement to the sum */
+string onesComplement(string sum) {
+	for (int i = 0; i < sum.length(); i++) {
 		sum[i] == '0'
 		? sum[i] = '1'
 		: sum[i] = '0';
@@ -184,11 +178,11 @@ string onesComplement(string sum){
  * the function returns false 
  * else it returns true
  */
-bool validate(string recSum, string complement){
+bool validate(string recSum, string complement) {
 	string result = addBlocks(recSum, complement);
 	
-	for(int i = 0;i < result.length();i++){
-		if(result[i] == '0'){
+	for (int i = 0; i < result.length(); i++) {
+		if (result[i] == '0') {
 			return false;
 		}
 	}
@@ -200,8 +194,8 @@ bool validate(string recSum, string complement){
  * checking the length of sent and received data
  * strings if they are the same
  */
-bool sameLength(string sent, string received){
-	if(sent.length() == received.length()){
+bool sameLength(string sent, string received) {
+	if (sent.length() == received.length()) {
 		return true;
 	}
 	return false;
